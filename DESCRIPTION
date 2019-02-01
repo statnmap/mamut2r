@@ -27,7 +27,6 @@ Imports:
     igraph,
     magrittr,
     purrr,
-    rhdf5,
     stats,
     tibble,
     utils,
@@ -39,6 +38,7 @@ Suggests:
     ggridges,
     knitr,
     pkgdown,
+    rhdf5,
     rmarkdown,
     tidyr,
     XML
@@ -49,4 +49,4 @@ Remotes:
 biocViews: rhdf5
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

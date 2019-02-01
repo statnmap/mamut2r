@@ -30,6 +30,7 @@ if (isTRUE(!requireNamespace("cellviz3d"))) {
 }
 if (isTRUE(!requireNamespace("rhdf5"))) {
   stop("Please install {rhdf5} using:\n",
+       "*Please note that it will only work with R > 3.5*\n",
        "install.packages(\"BiocManager\"); ",
        "BiocManager::install(\"rhdf5\")")
 }

@@ -38,8 +38,8 @@ BiocManager::install("rhdf5")
 devtools::install_github("marionlouveaux/cellviz3d")
 # usethis::use_roxygen_md()
 # devtools::install_github("ThinkR-open/attachment")
-attachment::att_to_description(extra.suggests = "pkgdown",
-                               pkg_ignore = c("BiocManager", "devtools"))
+attachment::att_to_description(extra.suggests = c("pkgdown", "rhdf5"),
+                               pkg_ignore = c("BiocManager", "devtools", "rhdf5"))
 attachment::create_dependencies_file(field = c("Depends", "Imports", "Suggests"))
 
 # Run Vignette

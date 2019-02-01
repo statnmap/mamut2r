@@ -28,28 +28,38 @@ To cite {mamut2r}, call the R built-in command `citation("mamut2r")`.
 
 {mamut2r} is only available on Github.
 
-``` r
-# install.packages("devtools")
-devtools::install_github("marionlouveaux/mamut2r")
+```{r, eval=FALSE}
+# install.packages("remotes")
+remotes::install_github("marionlouveaux/mamut2r")
+# With dependencies
+remotes::install_github("marionlouveaux/mamut2r", dependencies = c("Depends", "Imports"))
 ```
 
-You may need to install dependencies before:
+**Please read the following before trying to install:**
+
+### You may want to install dependencies before
+
+{rhdf5} is *only needed if* you want to extract fluorescence intensity from HDF5 files as presented in this vignette: <https://marionlouveaux.github.io/mamut2r/articles/B_fluo.html>
+*Note that last version of {rhdf5} requires R>=3.5*
+
 ```{r, eval=FALSE}
 # rhdf5 (>= 2.24.0) on bioconductor is required
 install.packages("BiocManager")
 BiocManager::install("rhdf5", update = FALSE)
 
 # Other packages on CRAN
-to_install <- c("classInt", "cowplot", "dplyr", "ggplot2", "ggraph", "ggridges", "glue", "grDevices", "igraph", "knitr", "magrittr", "pkgdown", "purrr", "rhdf5", "rmarkdown", "stats", "tibble", "tidyr", "utils", "viridis", "XML", "xml2")
-  for (i in to_install) {
-    message(paste("looking for ", i))
-    if (!requireNamespace(i)) {
-      message(paste("     installing", i))
-      install.packages(i)
-    }
-
+to_install <- c("classInt", "cowplot", "dplyr", "ggplot2", "ggraph", "ggridges", "glue", "grDevices", "igraph", "knitr", "magrittr", "pkgdown", "purrr", "rmarkdown", "stats", "tibble", "tidyr", "utils", "viridis", "XML", "xml2")
+for (i in to_install) {
+  message(paste("looking for ", i))
+  if (!requireNamespace(i)) {
+    message(paste("     installing", i))
+    install.packages(i)
   }
+  
+}
 ```
+
+### Linux and MacOS
 
 *For Linux and MacOS*
 To install {ggraph}, you will need "udunits".  
@@ -61,6 +71,47 @@ sudo apt-get install --yes libudunits2-dev
 - *MacOS:*
 ```
 brew install udunits
+```
+
+### Windows: Installing Rtools on with R 3.5
+
+You need to have Rtools installed to be able to install this package from Github. Rtools is not a R package, this a *collection of resources for building packages for R under Microsoft Windows*.
+You may encounter some problems with Rtools installation, if so, please follow these instructions:
+
+*Please fill `\*your_path\*` (in the 3 places) with the correct path to Rtools installation that you chose during the installation procedure*
+
+```{r, eval=FALSE}
+# Packages
+install.packages("pkgbuild")
+install.packages("devtools")
+
+# Test Rtools
+pkgbuild::find_rtools() 
+# If FALSE follow instructions
+
+#Rtools ----
+# Go to http://cran.r-project.org/bin/windows/Rtools/ and download at least Rtools35.exe
+# Install downloaded file
+
+# Set path of Rtools 
+Sys.setenv(PATH = paste(Sys.getenv("PATH"), "*your_path*/Rtools/bin/"), "*your_path*/Rtools/mingw_64/bin", sep = ";")) 
+# For 64 bit version
+Sys.setenv(BINPREF = "*your_path*/Rtools/mingw_64/bin")
+
+# Manually "force" version to be accepted 
+# This may not be needed
+library(devtools)
+assignInNamespace("version_info", c(devtools:::version_info, list("3.5" = list(version_min = "3.3.0", version_max = "99.99.99", path = "bin"))), "devtools") 
+
+# Test your installation
+pkgbuild::find_rtools() # should be TRUE now
+
+# Installation ---
+install.packages("remotes")
+remotes::install_github("marionlouveaux/mamut2r")
+# Or with dependencies
+remotes::install_github("marionlouveaux/mamut2r",
+                        dependencies = c("Depends", "Imports"))
 ```
 
 

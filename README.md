@@ -20,11 +20,17 @@ Installation
 {mamut2r} is only available on Github.
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("marionlouveaux/mamut2r")
+# install.packages("remotes")
+remotes::install_github("marionlouveaux/mamut2r")
+# With dependencies
+remotes::install_github("marionlouveaux/mamut2r", dependencies = c("Depends", "Imports"))
 ```
 
-You may need to install dependencies before:
+**Please read the following before trying to install:**
+
+### You may want to install dependencies before
+
+{rhdf5} is only needed if you want to extract fluorescence intensity from HDF5 files as presented in this vignette: <https://marionlouveaux.github.io/mamut2r/articles/B_fluo.html> *Note that last version of {rhdf5} requires R&gt;=3.5*
 
 ``` r
 # rhdf5 (>= 2.24.0) on bioconductor is required
@@ -33,15 +39,17 @@ BiocManager::install("rhdf5", update = FALSE)
 
 # Other packages on CRAN
 to_install <- c("classInt", "cowplot", "dplyr", "ggplot2", "ggraph", "ggridges", "glue", "grDevices", "igraph", "knitr", "magrittr", "pkgdown", "purrr", "rhdf5", "rmarkdown", "stats", "tibble", "tidyr", "utils", "viridis", "XML", "xml2")
-  for (i in to_install) {
-    message(paste("looking for ", i))
-    if (!requireNamespace(i)) {
-      message(paste("     installing", i))
-      install.packages(i)
-    }
-
+for (i in to_install) {
+  message(paste("looking for ", i))
+  if (!requireNamespace(i)) {
+    message(paste("     installing", i))
+    install.packages(i)
   }
+  
+}
 ```
+
+### Linux and MacOS
 
 *For Linux and MacOS* To install {ggraph}, you will need "udunits".
 
@@ -52,6 +60,46 @@ to_install <- c("classInt", "cowplot", "dplyr", "ggplot2", "ggraph", "ggridges",
 -   *MacOS:*
 
         brew install udunits
+
+### Windows: Installing Rtools on with R 3.5
+
+You need to have Rtools installed to be able to install this package from Github. Rtools is not a R package, this a *collection of resources for building packages for R under Microsoft Windows*. You may encounter some problems with Rtools installation, if so, please follow these instructions:
+
+*Please fill `\*your_path\*` (in the 3 places) with the correct path to Rtools installation that you chose during the installation procedure*
+
+``` r
+# Packages
+install.packages("pkgbuild")
+install.packages("devtools")
+
+# Test Rtools
+pkgbuild::find_rtools() 
+# If FALSE follow instructions
+
+#Rtools ----
+# Go to http://cran.r-project.org/bin/windows/Rtools/ and download at least Rtools35.exe
+# Install downloaded file
+
+# Set path of Rtools 
+Sys.setenv(PATH = paste(Sys.getenv("PATH"), "*your_path*/Rtools/bin/"), "*your_path*/Rtools/mingw_64/bin", sep = ";")) 
+# For 64 bit version
+Sys.setenv(BINPREF = "*your_path*/Rtools/mingw_64/bin")
+
+# Manually "force" version to be accepted 
+# This may not be needed
+library(devtools)
+assignInNamespace("version_info", c(devtools:::version_info, list("3.5" = list(version_min = "3.3.0", version_max = "99.99.99", path = "bin"))), "devtools") 
+
+# Test your installation
+pkgbuild::find_rtools() # should be TRUE now
+
+# Installation ---
+install.packages("remotes")
+remotes::install_github("marionlouveaux/mamut2r")
+# Or with dependencies
+remotes::install_github("marionlouveaux/mamut2r",
+                        dependencies = c("Depends", "Imports"))
+```
 
 Full documentation with {pkgdown}
 ---------------------------------
@@ -100,19 +148,19 @@ Information regarding the spots (x, y, z location, ID...) are extracted using th
 Spots_df <- Spots.as.dataframe(fileXML)
 Spots_df
 #> # A tibble: 441 x 11
-#>       ID name   VISIBILITY RADIUS QUALITY SOURCE_ID POSITION_T POSITION_X
-#>    <int> <chr>  <chr>       <dbl> <chr>   <chr>          <dbl>      <dbl>
-#>  1  2115 ID2115 1            14.6 -1.0    0                  0       834.
-#>  2  3077 ID3077 1            14.6 -1.0    0                  0       788.
-#>  3  1542 ID1542 1            14.6 -1.0    0                  0       865.
-#>  4  3398 ID3398 1            14.6 -1.0    0                  0       945.
-#>  5  2569 ID2569 1            14.6 -1.0    0                  0       888.
-#>  6  1930 ID1930 1            14.6 -1.0    0                  0       836.
-#>  7  2956 ID2956 1            14.6 -1.0    0                  0       788.
-#>  8  3597 ID3597 1            14.6 -1.0    0                  0      1086.
-#>  9   337 ID337  1            14.6 -1.0    0                  0      1046.
-#> 10  3025 ID3025 1            14.6 -1.0    0                  0       817.
-#> # ... with 431 more rows, and 3 more variables: POSITION_Y <dbl>,
+#>       ID name  VISIBILITY RADIUS QUALITY SOURCE_ID POSITION_T POSITION_X
+#>    <int> <chr> <chr>       <dbl> <chr>   <chr>          <dbl>      <dbl>
+#>  1  2115 ID21… 1            14.6 -1.0    0                  0       834.
+#>  2  3077 ID30… 1            14.6 -1.0    0                  0       788.
+#>  3  1542 ID15… 1            14.6 -1.0    0                  0       865.
+#>  4  3398 ID33… 1            14.6 -1.0    0                  0       945.
+#>  5  2569 ID25… 1            14.6 -1.0    0                  0       888.
+#>  6  1930 ID19… 1            14.6 -1.0    0                  0       836.
+#>  7  2956 ID29… 1            14.6 -1.0    0                  0       788.
+#>  8  3597 ID35… 1            14.6 -1.0    0                  0      1086.
+#>  9   337 ID337 1            14.6 -1.0    0                  0      1046.
+#> 10  3025 ID30… 1            14.6 -1.0    0                  0       817.
+#> # … with 431 more rows, and 3 more variables: POSITION_Y <dbl>,
 #> #   FRAME <chr>, POSITION_Z <dbl>
 ```
 
@@ -122,20 +170,20 @@ Information regarding the tracks (ID of source and target spots, track ID...) ar
 Tracks_df <- Tracks.as.dataframe(fileXML)
 Tracks_df
 #> # A tibble: 400 x 8
-#>    SPOT_SOURCE_ID SPOT_TARGET_ID LINK_COST          VELOCITY DISPLACEMENT
-#>             <int>          <int> <chr>                 <dbl>        <dbl>
-#>  1            135            142 103.63464237882181     5.81         5.81
-#>  2            179            182 -1.0                  18.6         18.6 
-#>  3            183            184 -1.0                  14.6         14.6 
-#>  4            182            183 -1.0                  14.6         14.6 
-#>  5            142            179 -1.0                   7.20         7.20
-#>  6            122            129 29.60479765257005      4.11         4.11
-#>  7             96            116 42.207383550507046     2.55         2.55
-#>  8            116            122 52.233971842280646     5.70         5.70
-#>  9            129            135 30.785953362464525     3.60         3.60
-#> 10            215            222 56.267814644478335    14.7         14.7 
-#> # ... with 390 more rows, and 3 more variables: TRACK_NAME <chr>,
-#> #   TRACK_ID <chr>, TRACK_INDEX <chr>
+#>    SPOT_SOURCE_ID SPOT_TARGET_ID LINK_COST VELOCITY DISPLACEMENT TRACK_NAME
+#>             <int>          <int> <chr>        <dbl>        <dbl> <chr>     
+#>  1            135            142 103.6346…     5.81         5.81 Track_1   
+#>  2            179            182 -1.0         18.6         18.6  Track_1   
+#>  3            183            184 -1.0         14.6         14.6  Track_1   
+#>  4            182            183 -1.0         14.6         14.6  Track_1   
+#>  5            142            179 -1.0          7.20         7.20 Track_1   
+#>  6            122            129 29.60479…     4.11         4.11 Track_1   
+#>  7             96            116 42.20738…     2.55         2.55 Track_1   
+#>  8            116            122 52.23397…     5.70         5.70 Track_1   
+#>  9            129            135 30.78595…     3.60         3.60 Track_1   
+#> 10            215            222 56.26781…    14.7         14.7  Track_2   
+#> # … with 390 more rows, and 2 more variables: TRACK_ID <chr>,
+#> #   TRACK_INDEX <chr>
 ```
 
 ### Checking tracks
@@ -146,21 +194,20 @@ Tracks are composed of nodes (the spots) and edges (between the spots). Source a
 Tracks_df <- checkTrack(Tracks_df, Spots_df)
 Tracks_df
 #> # A tibble: 400 x 10
-#>    SPOT_SOURCE_ID SPOT_TARGET_ID LINK_COST          VELOCITY DISPLACEMENT
-#>             <int>          <int> <chr>                 <dbl>        <dbl>
-#>  1            135            142 103.63464237882181     5.81         5.81
-#>  2            179            182 -1.0                  18.6         18.6 
-#>  3            183            184 -1.0                  14.6         14.6 
-#>  4            182            183 -1.0                  14.6         14.6 
-#>  5            142            179 -1.0                   7.20         7.20
-#>  6            122            129 29.60479765257005      4.11         4.11
-#>  7             96            116 42.207383550507046     2.55         2.55
-#>  8            116            122 52.233971842280646     5.70         5.70
-#>  9            129            135 30.785953362464525     3.60         3.60
-#> 10            215            222 56.267814644478335    14.7         14.7 
-#> # ... with 390 more rows, and 5 more variables: TRACK_NAME <chr>,
-#> #   TRACK_ID <chr>, TRACK_INDEX <chr>, SPOT_SOURCE_FRAME <dbl>,
-#> #   SPOT_TARGET_FRAME <dbl>
+#>    SPOT_SOURCE_ID SPOT_TARGET_ID LINK_COST VELOCITY DISPLACEMENT TRACK_NAME
+#>             <int>          <int> <chr>        <dbl>        <dbl> <chr>     
+#>  1            135            142 103.6346…     5.81         5.81 Track_1   
+#>  2            179            182 -1.0         18.6         18.6  Track_1   
+#>  3            183            184 -1.0         14.6         14.6  Track_1   
+#>  4            182            183 -1.0         14.6         14.6  Track_1   
+#>  5            142            179 -1.0          7.20         7.20 Track_1   
+#>  6            122            129 29.60479…     4.11         4.11 Track_1   
+#>  7             96            116 42.20738…     2.55         2.55 Track_1   
+#>  8            116            122 52.23397…     5.70         5.70 Track_1   
+#>  9            129            135 30.78595…     3.60         3.60 Track_1   
+#> 10            215            222 56.26781…    14.7         14.7  Track_2   
+#> # … with 390 more rows, and 4 more variables: TRACK_ID <chr>,
+#> #   TRACK_INDEX <chr>, SPOT_SOURCE_FRAME <dbl>, SPOT_TARGET_FRAME <dbl>
 ```
 
 ### Merging spots and tracks information
@@ -171,19 +218,19 @@ Spots dataframes can be enriched with information coming from the tracks using s
 Spots_Tracks <- spots.and.tracks(Spots_df, Tracks_df)
 Spots_Tracks
 #> # A tibble: 441 x 12
-#>       ID name   VISIBILITY RADIUS QUALITY SOURCE_ID POSITION_T POSITION_X
-#>    <int> <chr>  <chr>       <dbl> <chr>   <chr>          <dbl>      <dbl>
-#>  1  2115 ID2115 1            14.6 -1.0    0                  0       834.
-#>  2  3077 ID3077 1            14.6 -1.0    0                  0       788.
-#>  3  1542 ID1542 1            14.6 -1.0    0                  0       865.
-#>  4  3398 ID3398 1            14.6 -1.0    0                  0       945.
-#>  5  2569 ID2569 1            14.6 -1.0    0                  0       888.
-#>  6  1930 ID1930 1            14.6 -1.0    0                  0       836.
-#>  7  2956 ID2956 1            14.6 -1.0    0                  0       788.
-#>  8  3597 ID3597 1            14.6 -1.0    0                  0      1086.
-#>  9   337 ID337  1            14.6 -1.0    0                  0      1046.
-#> 10  3025 ID3025 1            14.6 -1.0    0                  0       817.
-#> # ... with 431 more rows, and 4 more variables: POSITION_Y <dbl>,
+#>       ID name  VISIBILITY RADIUS QUALITY SOURCE_ID POSITION_T POSITION_X
+#>    <int> <chr> <chr>       <dbl> <chr>   <chr>          <dbl>      <dbl>
+#>  1  2115 ID21… 1            14.6 -1.0    0                  0       834.
+#>  2  3077 ID30… 1            14.6 -1.0    0                  0       788.
+#>  3  1542 ID15… 1            14.6 -1.0    0                  0       865.
+#>  4  3398 ID33… 1            14.6 -1.0    0                  0       945.
+#>  5  2569 ID25… 1            14.6 -1.0    0                  0       888.
+#>  6  1930 ID19… 1            14.6 -1.0    0                  0       836.
+#>  7  2956 ID29… 1            14.6 -1.0    0                  0       788.
+#>  8  3597 ID35… 1            14.6 -1.0    0                  0      1086.
+#>  9   337 ID337 1            14.6 -1.0    0                  0      1046.
+#> 10  3025 ID30… 1            14.6 -1.0    0                  0       817.
+#> # … with 431 more rows, and 4 more variables: POSITION_Y <dbl>,
 #> #   FRAME <chr>, POSITION_Z <dbl>, TRACK_ID <chr>
 ```
 
