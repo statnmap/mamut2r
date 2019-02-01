@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 
 In this vignette, we will retrieve fluorescence intensity values around the position of each spot and display the mean intensity for each spot.
 
+*Vignette in construction. Dataset not available*
+
 ## Librairies
 
 To acces the fluorescence intensity values in the Big Data Viewer .h5 file, we need to use the {rhdf5} library.    
@@ -131,6 +133,8 @@ plot3d(Spots_df_loc[which(Spots_df_loc$FRAME == 0),
 ## Get fluorescence values from MaMuT xml files
 
 ```{r, eval=FALSE}
+H5_path <- system.file("data4mamut2r/MaMuT_Parhyale_demo.h5",
+                       package = "mamut2r")
 all_cells <- getFluo(H5_path = "../data4mamut2r/MaMuT_Parhyale_demo.h5", 
                      Spots_df_loc,
                      x_px = POSITION_X_loc,

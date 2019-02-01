@@ -25,13 +25,13 @@ getFluo <- function(H5_path, Spots_df, x_px = x_px, y_px = y_px, z_px = z_px,
 
   if (!requireNamespace("rhdf5")) {
     stop("get_fluo() requires {rhdf5}, here are the instruction to install it.",
-         "*Please note that it will only work with R > 3.5*\n",
+         "*Please note that prefered (rhdf5 >= 2.24) will only work with R > 3.5*\n",
          "Please install {rhdf5} using:\n",
          "install.packages(\"BiocManager\"); ",
          "BiocManager::install(\"rhdf5\")")
   } else if (packageVersion("rhdf5") < 2.24 ) {
-    stop("get_fluo() requires {rhdf5} > 2.24, here are the instruction to install it.\n",
-         "*Please note that it will only work with R > 3.5*\n",
+    message("get_fluo() may better work with (rhdf5 >= 2.24), here are the instruction to install it.\n",
+         "*Please note that (rhdf5 >= 2.24) will only be available with R > 3.5*\n",
          "Please update {rhdf5} using:\n",
          "install.packages(\"BiocManager\"); ",
          "BiocManager::install(\"rhdf5\")")
@@ -62,7 +62,12 @@ getFluo <- function(H5_path, Spots_df, x_px = x_px, y_px = y_px, z_px = z_px,
                        index = list((coords[1]-cubeSize):(coords[1]+cubeSize),
                                     (coords[2]-cubeSize):(coords[2]+cubeSize),
                                     (coords[3]-cubeSize):(coords[3]+cubeSize)))
-      rhdf5::h5closeAll()
+
+      if (packageVersion("rhdf5") < 2.24 ) {
+        rhdf5::H5Fclose(H5_path)
+      } else {
+        rhdf5::h5closeAll()
+      }
       return(list(t, nameSpot, pixels))
     },
     H5_path)

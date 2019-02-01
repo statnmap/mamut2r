@@ -31,13 +31,17 @@ To cite {mamut2r}, call the R built-in command `citation("mamut2r")`.
 ```{r, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("marionlouveaux/mamut2r")
-# With dependencies
-remotes::install_github("marionlouveaux/mamut2r", dependencies = c("Depends", "Imports"))
 ```
 
 **Please read the following before trying to install:**
 
 ### You may want to install dependencies before
+
+This should install every dependencies needed
+```{r}
+# Install with dependencies
+remotes::install_github("marionlouveaux/mamut2r", dependencies = TRUE)
+```
 
 {rhdf5} is *only needed if* you want to extract fluorescence intensity from HDF5 files as presented in this vignette: <https://marionlouveaux.github.io/mamut2r/articles/B_fluo.html>
 *Note that last version of {rhdf5} requires R>=3.5*
